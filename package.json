@@ -1,5 +1,6 @@
 {
   "dependencies": {
-    "prop-types": "^15.6.2"
+    "prop-types": "^15.6.2",
+    "react-lines-ellipsis": "^0.13.2"
   }
 }
