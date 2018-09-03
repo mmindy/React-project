@@ -39,13 +39,10 @@
         poster: PropTypes.string.isRequired
       }  
     ```
-
-### AJAX on React
-#### fetch vs promise
-
+    
 ### async await
-async : 비동기
-await : 해당 함수가 끝나기를 기다리는 것(성공여부 판단x)
+- async : 비동기
+- await : 해당 함수가 끝나기를 기다리는 것(성공여부 판단x)
 
 ### react-lines-ellipsis
 [LINK](https://www.npmjs.com/package/react-lines-ellipsis)
