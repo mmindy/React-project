@@ -8,5 +8,5 @@
 
 
 ## UI 구성
-![todo list ui](./todoList_ui.jpg)
+![todo list ui](./elevator_ui.jpg)
 
