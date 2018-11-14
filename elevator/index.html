@@ -1,0 +1,145 @@
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no"/>
+
+		<title>Elevator</title>
+		<meta name="keywords" content="">
+		<meta name="description" content="">
+		<meta name="format-detection" content="telephone=no">
+
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="format-detection" content="telephone=no">
+		<style>
+			* { margin:0; padding:0; }
+			ul, ol, li, dl, dt, dd { list-style:none; }
+
+			h1 { width:650px; margin:20px auto; padding:10px 0; font-family:arial; font-size:25px; text-align:center; border:1px solid #ddd; background-color:#e8e8e8; }
+
+			.elevator { position:relative; width:650px; margin:auto; border:1px solid #ffc000; background-color:rgba(255,192,0,0.1); }
+			.elevator .floor { height:110px; border-top:1px dashed #ffc000; }
+			.elevator .floor:first-child { border-top:0; }
+			.elevator .floor .userSection { float:right; position:relative; width:180px; height:100%; background-color:rgba(255,192,0,0.3);}
+			.elevator .floor .userSection .moveBtn { position:absolute; left:0; bottom:0; width:100%; padding:10px 0; text-align:center; }
+			.elevator .floor .userSection .moveBtn .moveFloor { padding:3px 7px; font-size:15px; font-weight:bold; border-radius:3px; border:0; background-color:#ffc000; color:#fff; font-family:arial; }
+
+			.elevator .movement { position:absolute; top:0; left:0; width:410px; height:100%; padding:0 30px; }
+			.elevator .machine { position:relative; float:left; width:33.333%; height:100%; overflow:hidden; }
+			.elevator .machine:before { content:""; position:absolute; top:0; left:50%; width:1px; height:100%; background:#ddd; }
+			.elevator .machine .ele { position:absolute; bottom:0; left:0; z-index:2; width:90%; height:90px; margin:10px 5%; background-color:#888; transition:bottom 0.5s ease-in-out; }
+			.elevator .machine.active .ele { background-color:#ffc000; }
+		</style>
+	</head>
+	<body>
+		<h1>ELEVATOR</h1>
+		<section class="elevator" id="ele1">
+			<ul class="building">
+				<li class="floor">
+					<div class="running"></div>
+					<div class="userSection">
+						<div class="moveBtn">
+							<select name="floor" class="btn">
+								<option value="1">1층</option>
+								<option value="2">2층</option>
+								<option value="3">3층</option>
+								<option value="4">4층</option>
+								<option value="5">5층</option>
+							</select>
+							<button class="moveFloor">GO!</button>
+						</div>
+					</div>
+				</li>
+				
+				<li class="floor">
+					<div class="running"></div>
+					<div class="userSection">
+						<div class="moveBtn">
+							<select name="floor" class="btn">
+								<option value="1">1층</option>
+								<option value="2">2층</option>
+								<option value="3">3층</option>
+								<option value="4">4층</option>
+								<option value="5">5층</option>
+							</select>
+							<button class="moveFloor">GO!</button>
+						</div>
+					</div>
+				</li>
+				
+				<li class="floor">
+					<div class="running"></div>
+					<div class="userSection">
+						<div class="moveBtn">
+							<select name="floor" class="btn">
+								<option value="1">1층</option>
+								<option value="2">2층</option>
+								<option value="3">3층</option>
+								<option value="4">4층</option>
+								<option value="5">5층</option>
+							</select>
+							<button class="moveFloor">GO!</button>
+						</div>
+					</div>
+				</li>
+				
+				<li class="floor">
+					<div class="running"></div>
+					<div class="userSection">
+						<div class="moveBtn">
+							<select name="floor" class="btn">
+								<option value="1">1층</option>
+								<option value="2">2층</option>
+								<option value="3">3층</option>
+								<option value="4">4층</option>
+								<option value="5">5층</option>
+							</select>
+							<button class="moveFloor">GO!</button>
+						</div>
+					</div>
+				</li>
+				
+				<li class="floor">
+					<div class="running"></div>
+					<div class="userSection">
+						<div class="moveBtn">
+							<select name="floor" class="btn">
+								<option value="1">1층</option>
+								<option value="2">2층</option>
+								<option value="3">3층</option>
+								<option value="4">4층</option>
+								<option value="5">5층</option>
+							</select>
+							<button class="moveFloor">GO!</button>
+						</div>
+					</div>
+				</li>
+			</ul>
+
+			<ul class="movement">
+				<li class="machine">
+					<div class="ele"></div>
+				</li>
+				
+				<li class="machine">
+					<div class="ele"></div>
+				</li>
+				
+				<li class="machine">
+					<div class="ele"></div>
+				</li>
+			</ul>
+		</section>
+
+		<script src="./js/script_es5.js"></script>
+		<script>
+			var ele1 = new Elevator({
+				id : "#ele1",
+				elevator : 3,
+				floor : 5
+			});
+		</script>
+  </body>
+</html>
+
