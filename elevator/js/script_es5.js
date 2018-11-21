@@ -1,114 +1,114 @@
 var Elevator = (function() {
+  var BUILDING_INFO = {};
   var ELEVATOR = [];
-  var FLOOR;
   var container;
+  
+  var setInfo = function(info) {
+    if ( typeof info !== "object") {
+      warn("info 형식 오류");
+      return false;
+    }
 
-  var init = info => {
+    if (typeof info.id !== "string") {
+      warn("info id는 string으로");
+      return false;
+    }
+
+    if ( isNaN(info.elevator) || isNaN(info.floor) ) {
+      warn("info elevator와 floor는 number로");
+      return false;
+    }
+
     container = document.querySelector(info.id);
 
-    if ( info.elevator > 0 ) {
-      var i = 0
-      do {
-        ELEVATOR.push({
-          idx : i++,
-          current_floor : 0,
-          prev_floor : 0
-        })
-      } while ( i < info.elevator )
-    } else {
-      warn("elevator 잘못 입력함");
-      return false;
+    BUILDING_INFO = {
+      floor : info.floor,
+      elevator : info.elevator
     }
 
-    if ( info.floor > 0 ) FLOOR = info.floor - 1;
-    else {
-      warn("floor 잘못 입력함");
-      return false;
+    for (var i = 0; i < BUILDING_INFO.elevator; i++ ){
+      ELEVATOR.push({
+        idx : i,
+        current_floor : 0,
+        prev_floor : 0
+      })
     }
 
-    setElevatorPosition();
-    addClickEvent();
+    var elevator = container.querySelectorAll(".elevator .movement");
+    ELEVATOR.forEach(function(v, i) {
+      elevator[i].dataset.elevatorId = v.idx;
+    })
   }
 
   var addClickEvent = function() {
-    var floorBtn = container.querySelectorAll(".floor .moveFloor");
+    var moveButton = container.querySelectorAll(".floorWrap .moveBtn");
+    moveButton.forEach(function(v,i) {
+      v.addEventListener("click", function() {
+        var goFloor = v.parentNode.children[0].value - 1 ;
+        var clickFloor = Math.abs(i - BUILDING_INFO.floor) - 1;
 
-    floorBtn.forEach(function(v, i) {
-      floorBtn[i].addEventListener("click", function() {
-        var goFloor = floorBtn[i].parentNode.children[0].value - 1 ;
-        clickFloor = Math.abs(i - FLOOR);
-
-        if (!isNaN(goFloor)) {
-          var moveElevatorIdx = selectElevator();
-          compareFloor(moveElevatorIdx, clickFloor);
-          addClass(moveElevatorIdx);
-          changeCurrentFloor(moveElevatorIdx, goFloor);
-          setElevatorPosition(moveElevatorIdx);
-        }
+        compareFloor(clickFloor);
+        var moveElevator = assignElevator();
+        setElvatorPosition(moveElevator, clickFloor, goFloor);
       })
     })
   }
-
-  var compareFloor = function(moveElevatorIdx,clickFloor) {
-    ELEVATOR.forEach(function (v, i) {
-      if (i === moveElevatorIdx) v.prev_floor = clickFloor;
-      v.compare_floor = Math.abs(Number(v.current_floor) - Number(clickFloor));
+  
+  var compareFloor = function(clickFloor) {
+    ELEVATOR.forEach(function(v) {
+      v.compare_floor = Math.abs(v.current_floor - clickFloor);
+    })
+  }
+  
+  var assignElevator = function() {
+    return ELEVATOR.reduce(function(prev, curr) {
+      if( prev.compare_floor > curr.compare_floor ) return curr;
+      else if ( prev.compare_floor < curr.compare_floor ) return prev;
+      else return prev.idx <= curr.idx ? prev : curr;
     })
   }
 
-  var selectElevator = function() {
-    var minData = ELEVATOR.reduce( function(previous, current) { 
-      if (previous.compare_floor > current.compare_floor) {
-        return current;
-      } else {
-        if ( previous.compare_floor != current.compare_floor) {
-          return previous;
-        } else {
-          return previous.idx > current.idx ? current : previous;
-        }
-      }
-    });
-    
-    return minData.idx;
-  }
-
-  var addClass = function(idx) {
-    var elevatorList = container.querySelectorAll(".movement .machine");
-    elevatorList.forEach(function(v) {
-      v.classList.remove("active");
-    })
-    elevatorList[idx].classList.add("active");
-  }
-
-  var setElevatorPosition = function() {
-    setBottomPosition("prev_floor");
-
-    setTimeout(function() {
-      setBottomPosition("current_floor");
-    }, 1000)
-  };
-
-  var setBottomPosition = function(floorName) {    
-    var floorH = Number(container.querySelector(".floor").offsetHeight + 1);
-    var elevator = container.querySelectorAll(".machine .ele");
-    
-    elevator.forEach( function(v, i) {
-      if (floorName === "current_floor") v.style.bottom = (ELEVATOR[i].current_floor * floorH) + "px";
-      else v.style.bottom = (ELEVATOR[i].prev_floor * floorH) + "px";      
-    })
-  }
-
-  var changeCurrentFloor = function(moveElevatorIdx, goFloor) {
-    ELEVATOR.some(function(v,i) {
-      if ( v.idx === moveElevatorIdx) {
+  var setElvatorPosition = function(moveElevator, clickFloor, goFloor) {
+    ELEVATOR.forEach(function(v) {
+      if ( v.idx === moveElevator.idx ) {
+        v.prev_floor = clickFloor;
         v.current_floor = goFloor;
-        return true;
       }
-    });
+    })
+    
+    addActiveClass(moveElevator);
+
+    setStyleBottom("prev");
+    
+    setTimeout(function() {
+      setStyleBottom("current");
+    }, 1000);
+  }
+
+  var addActiveClass = function(moveElevator) {
+    var elevator = container.querySelectorAll(".elevator .movement");
+    elevator.forEach(function(v) {
+      v.classList.remove("active");
+      if (Number(v.dataset.elevatorId) === moveElevator.idx) v.classList.add("active");
+    })
   };
+
+  var setStyleBottom = function(floorName) {
+    var floorHeight = container.querySelectorAll('.floor')[0].offsetHeight + 1;
+    var elevator = container.querySelectorAll(".elevator .movement");
+
+    ELEVATOR.forEach(function(v,i) {
+      var elevatorId = Number(elevator[i].dataset.elevatorId);
+      if (v.idx === elevatorId) {
+        if ( floorName === "prev") elevator[i].style.bottom = floorHeight * v.prev_floor 
+        else elevator[i].style.bottom = floorHeight * v.current_floor 
+      }
+    })
+  }
 
   return function(info){
-    init(info);
+    setInfo(info);
+    addClickEvent();
   };
 })();
 
